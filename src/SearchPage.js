@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {Link} from 'react-router-dom'
 
-class SearchPageComponent extends Component {
+class SearchPage extends Component {
 
   render() {
     return (
@@ -29,4 +29,4 @@ class SearchPageComponent extends Component {
   }
 }
 
-export default SearchPageComponent;
+export default SearchPage;

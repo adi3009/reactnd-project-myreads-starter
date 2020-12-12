@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {Link} from 'react-router-dom'
-import Book from "./Book";
+import Shelf from "./Shelf";
 
 class MainPage extends Component {
 
@@ -18,9 +18,11 @@ class MainPage extends Component {
     return shelves;
   };
 
-  bookDataToBook = (book) => <li key={book.id}>
-    <Book title={book.title} authors={book.authors} imageUrl={book.imageLinks.thumbnail} currentShelf={book.shelf}/>
-  </li>;
+  shelves = [
+    {id: 'currentlyReading', title: 'Currently Reading'},
+    {id: 'wantToRead', title: 'Want to Read'},
+    {id: 'read', title: 'Read'}
+  ];
 
   render() {
 
@@ -33,30 +35,9 @@ class MainPage extends Component {
         </div>
         <div className="list-books-content">
           <div>
-            <div className="bookshelf">
-              <h2 className="bookshelf-title">Currently Reading</h2>
-              <div className="bookshelf-books">
-                <ol className="books-grid">
-                  {booksByShelf.currentlyReading && booksByShelf.currentlyReading.map(this.bookDataToBook)}
-                </ol>
-              </div>
-            </div>
-            <div className="bookshelf">
-              <h2 className="bookshelf-title">Want to Read</h2>
-              <div className="bookshelf-books">
-                <ol className="books-grid">
-                  {booksByShelf.wantToRead && booksByShelf.wantToRead.map(this.bookDataToBook)}
-                </ol>
-              </div>
-            </div>
-            <div className="bookshelf">
-              <h2 className="bookshelf-title">Read</h2>
-              <div className="bookshelf-books">
-                <ol className="books-grid">
-                  {booksByShelf.read && booksByShelf.read.map(this.bookDataToBook)}
-                </ol>
-              </div>
-            </div>
+            {this.shelves.map(shelf => (
+              <Shelf key={shelf.id} title={shelf.title} books={booksByShelf[shelf.id] || []}/>
+            ))}
           </div>
         </div>
         <div className="open-search">

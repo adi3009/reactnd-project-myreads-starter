@@ -12,8 +12,10 @@ class BooksApp extends React.Component {
     books: []
   };
 
+  bookDataToBookModel = (bookData) => new BookModel(bookData, this.handleChangeShelf);
+
   fetchBooks = () => BooksAPI.getAll().then(books => this.setState({
-    books: books.map(b => new BookModel(b, this.handleChangeShelf))
+    books: books.map(this.bookDataToBookModel)
   }));
 
   findBook = (bookId) => this.state.books.find(book => book.id === bookId);
@@ -26,7 +28,7 @@ class BooksApp extends React.Component {
    */
   handleChangeShelf = (changedBook, shelf) => {
     const newBooks = this.state.books.map(book => {
-      const newBook = {...book};
+      const newBook = this.bookDataToBookModel({...book});
       if (newBook.id === changedBook.id) {
         newBook.shelf = shelf
       }
@@ -44,7 +46,7 @@ class BooksApp extends React.Component {
 
   setBookShelfOnSearchResults = (books) => {
     return books.map(bookData => {
-      const book = new BookModel(bookData, this.handleChangeShelf);
+      const book = this.bookDataToBookModel(bookData);
       const shelfBooks = this.findBook(book.id);
       if (shelfBooks) {
         book.shelf = shelfBooks.shelf;

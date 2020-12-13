@@ -21,27 +21,30 @@ class BooksApp extends React.Component {
   findBook = (bookId) => this.state.books.find(book => book.id === bookId);
 
   /**
-   * Update shelf of a book in local books state and clears shelves
+   * Update shelf of a book in local books state
    *
    * @param changedBook
    * @param shelf
    */
   handleChangeShelf = (changedBook, shelf) => {
-    const newBooks = this.state.books.map(book => {
+    const currentBooks = [];
+    let isNew = true; // is the changed book not in state, when book shelf changed on search page
+    this.state.books.forEach(book => {
       const newBook = this.bookDataToBookModel({...book});
       if (newBook.id === changedBook.id) {
-        newBook.shelf = shelf
+        newBook.shelf = shelf;
+        isNew = false;
       }
 
-      return newBook
+      currentBooks.push(newBook);
     });
 
-    if (!this.findBook(changedBook.id)) {
+    if (isNew) {
       changedBook.shelf = shelf;
-      newBooks.push(changedBook);
+      currentBooks.push(changedBook);
     }
 
-    this.setState({books: newBooks});
+    this.setState({books: currentBooks});
   };
 
   setBookShelfOnSearchResults = (books) => {

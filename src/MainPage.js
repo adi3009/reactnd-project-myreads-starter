@@ -1,21 +1,12 @@
 import React, {Component} from 'react'
 import {Link} from 'react-router-dom'
 import Shelf from "./Shelf";
+import * as BooksAPI from "./BooksAPI";
 
 class MainPage extends Component {
 
-  arrangeBooksByShelf = (books) => {
-    const shelves = {};
-    books.forEach(book => {
-      const shelf = book.shelf;
-      if (!shelves[shelf]) {
-        shelves[shelf] = [];
-      }
-
-      shelves[shelf].push(book);
-    });
-
-    return shelves;
+  state = {
+    books: []
   };
 
   shelves = [
@@ -24,9 +15,51 @@ class MainPage extends Component {
     {id: 'read', title: 'Read'}
   ];
 
+  booksByShelves = {};
+
+  fetchBooks = () => BooksAPI.getAll().then(books => this.setState({
+    books
+  }));
+
+  /**
+   * Update shelf of a book in local books state and clears shelves
+   *
+   * @param bookId
+   * @param shelf
+   */
+  handleChangeShelf = (bookId, shelf) => {
+    const newBooks = this.state.books.map(book => {
+      const newBook = {...book};
+      if (newBook.id === bookId) {
+        newBook.shelf = shelf
+      }
+
+      return newBook
+    });
+
+    this.booksByShelves = {};
+
+    this.setState({books: newBooks});
+  };
+
+  arrangeBooksByShelf = (books) => {
+    books.forEach(book => {
+      const shelf = book.shelf;
+      if (!this.booksByShelves[shelf]) {
+        this.booksByShelves[shelf] = [];
+      }
+
+      this.booksByShelves[shelf].push(book);
+    });
+  };
+
+  componentDidMount() {
+    this.fetchBooks();
+  }
+
   render() {
 
-    const booksByShelf = this.arrangeBooksByShelf(this.props.books);
+    this.arrangeBooksByShelf(this.state.books);
 
     return (
       <div className="list-books">
@@ -36,7 +69,8 @@ class MainPage extends Component {
         <div className="list-books-content">
           <div>
             {this.shelves.map(shelf => (
-              <Shelf key={shelf.id} title={shelf.title} books={booksByShelf[shelf.id] || []}/>
+              <Shelf key={shelf.id} title={shelf.title} books={this.booksByShelves[shelf.id] || []}
+                     onChangeBookShelf={this.handleChangeShelf}/>
             ))}
           </div>
         </div>

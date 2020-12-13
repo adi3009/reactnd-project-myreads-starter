@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import * as BooksAPI from './BooksAPI';
-import Book from "./Book";
 import BookModel from "./BookModel";
+import BooksGrid from "./BooksGrid";
 
 class SearchPage extends Component {
 
@@ -27,17 +27,6 @@ class SearchPage extends Component {
 
   handleBookShelfChange = () => {};
 
-  bookDataToBook = (book) => {
-    return (<li key={book.id}>
-      <Book bookId={book.id}
-            title={book.title}
-            authors={book.authors}
-            imageUrl={book.imageUrl}
-            currentShelf={book.shelf}
-            onChangeShelf={book.onChangeShelf}/>
-    </li>);
-  };
-
   render() {
 
     const {query, books} = this.state;
@@ -60,9 +49,7 @@ class SearchPage extends Component {
           </div>
         </div>
         <div className="search-books-results">
-          <ol className="books-grid">
-            {books.map(this.bookDataToBook)}
-          </ol>
+          <BooksGrid books={books}/>
         </div>
       </div>
     );

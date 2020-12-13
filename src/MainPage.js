@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {Link} from 'react-router-dom'
 import Shelf from "./Shelf";
 import * as BooksAPI from "./BooksAPI";
+import BookModel from "./BookModel";
 
 class MainPage extends Component {
 
@@ -18,7 +19,7 @@ class MainPage extends Component {
   booksByShelves = {};
 
   fetchBooks = () => BooksAPI.getAll().then(books => this.setState({
-    books
+    books: books.map(b => new BookModel(b, this.handleChangeShelf))
   }));
 
   /**

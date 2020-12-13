@@ -9,7 +9,7 @@ class Book extends Component {
     imageUrl: PropTypes.string,
     title: PropTypes.string.isRequired,
     authors: PropTypes.array.isRequired,
-    currentShelf: PropTypes.string.isRequired,
+    currentShelf: PropTypes.string,
     onChangeShelf: PropTypes.func.isRequired
   };
 

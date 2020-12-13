@@ -1,10 +1,14 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
+import PropTypes from 'prop-types';
 import * as BooksAPI from './BooksAPI';
-import BookModel from "./BookModel";
 import BooksGrid from "./BooksGrid";
 
 class SearchPage extends Component {
+
+  static propTypes = {
+    onSearchComplete: PropTypes.func.isRequired
+  };
 
   state = {
     query: '',
@@ -20,12 +24,10 @@ class SearchPage extends Component {
   queryBooks = (query) => {
     BooksAPI.search(query).then((result) => {
       const books = !result || result.map === undefined ? [] : result;
-      const bookModels = books.map(bookData => (new BookModel(bookData, this.handleBookShelfChange)));
+      const bookModels = this.props.onSearchComplete(books);
       this.setState({books: bookModels});
     });
   };
-
-  handleBookShelfChange = () => {};
 
   render() {
 

@@ -1,13 +1,13 @@
-import React, {Component} from 'react'
-import {Link} from 'react-router-dom'
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
+import {Link} from 'react-router-dom';
 import Shelf from "./Shelf";
-import * as BooksAPI from "./BooksAPI";
-import BookModel from "./BookModel";
 
 class MainPage extends Component {
 
-  state = {
-    books: []
+  static propTypes = {
+    books: PropTypes.array.isRequired,
+    onChangeShelf: PropTypes.func.isRequired
   };
 
   shelves = [
@@ -18,32 +18,8 @@ class MainPage extends Component {
 
   booksByShelves = {};
 
-  fetchBooks = () => BooksAPI.getAll().then(books => this.setState({
-    books: books.map(b => new BookModel(b, this.handleChangeShelf))
-  }));
-
-  /**
-   * Update shelf of a book in local books state and clears shelves
-   *
-   * @param bookId
-   * @param shelf
-   */
-  handleChangeShelf = (bookId, shelf) => {
-    const newBooks = this.state.books.map(book => {
-      const newBook = {...book};
-      if (newBook.id === bookId) {
-        newBook.shelf = shelf
-      }
-
-      return newBook
-    });
-
-    this.booksByShelves = {};
-
-    this.setState({books: newBooks});
-  };
-
   arrangeBooksByShelf = (books) => {
+    this.booksByShelves = {};
     books.forEach(book => {
       const shelf = book.shelf;
       if (!this.booksByShelves[shelf]) {
@@ -54,13 +30,9 @@ class MainPage extends Component {
     });
   };
 
-  componentDidMount() {
-    this.fetchBooks();
-  }
-
   render() {
 
-    this.arrangeBooksByShelf(this.state.books);
+    this.arrangeBooksByShelf(this.props.books);
 
     return (
       <div className="list-books">
@@ -71,7 +43,7 @@ class MainPage extends Component {
           <div>
             {this.shelves.map(shelf => (
               <Shelf key={shelf.id} title={shelf.title} books={this.booksByShelves[shelf.id] || []}
-                     onChangeBookShelf={this.handleChangeShelf}/>
+                     onChangeBookShelf={this.props.onChangeShelf}/>
             ))}
           </div>
         </div>

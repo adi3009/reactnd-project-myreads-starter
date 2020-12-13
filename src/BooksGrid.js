@@ -3,12 +3,7 @@ import PropTypes from 'prop-types';
 import Book from "./Book";
 
 const bookDataToBook = book => (<li key={book.id}>
-  <Book bookId={book.id}
-        title={book.title}
-        authors={book.authors}
-        imageUrl={book.imageUrl}
-        currentShelf={book.shelf}
-        onChangeShelf={book.onChangeShelf}/>
+  <Book book={book}/>
 </li>);
 
 const BooksGrid = ({books}) => (

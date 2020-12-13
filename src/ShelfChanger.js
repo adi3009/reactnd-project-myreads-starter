@@ -6,11 +6,10 @@ const changeShelf = (newShelf, bookId, onSuccess) => {
   BooksAPI.update({id: bookId}, newShelf).then(onSuccess(newShelf));
 };
 
-const ShelfChanger = (props) => {
-  const {bookId, currentShelf, onShelfChange} = props;
+const ShelfChanger = ({book}) => {
 
   return (<div className="book-shelf-changer">
-    <select value={currentShelf} onChange={(event) => (changeShelf(event.target.value, bookId, onShelfChange))}>
+    <select value={book.shelf} onChange={(event) => (changeShelf(event.target.value, book.id, book.onChangeShelf))}>
       <option value="move" disabled>Move to...</option>
       <option value="currentlyReading">Currently Reading</option>
       <option value="wantToRead">Want to Read</option>
@@ -21,9 +20,7 @@ const ShelfChanger = (props) => {
 };
 
 ShelfChanger.propTypes = {
-  bookId: PropTypes.string.isRequired,
-  currentShelf: PropTypes.string.isRequired,
-  onShelfChange: PropTypes.func.isRequired
+  book: PropTypes.object.isRequired
 };
 
 export default ShelfChanger;

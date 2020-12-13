@@ -6,8 +6,7 @@ import Shelf from "./Shelf";
 class MainPage extends Component {
 
   static propTypes = {
-    books: PropTypes.array.isRequired,
-    onChangeShelf: PropTypes.func.isRequired
+    books: PropTypes.array.isRequired
   };
 
   shelves = [
@@ -42,8 +41,7 @@ class MainPage extends Component {
         <div className="list-books-content">
           <div>
             {this.shelves.map(shelf => (
-              <Shelf key={shelf.id} title={shelf.title} books={this.booksByShelves[shelf.id] || []}
-                     onChangeBookShelf={this.props.onChangeShelf}/>
+              <Shelf key={shelf.id} title={shelf.title} books={this.booksByShelves[shelf.id] || []}/>
             ))}
           </div>
         </div>

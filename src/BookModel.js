@@ -5,7 +5,11 @@ class BookModel {
     this.title = bookData.title;
     this.authors = bookData.authors || [''];
     this.shelf = bookData.shelf || '';
-    this.onChangeShelf = onChangeShelf;
+    this.onChangeShelf = (self) => onChangeShelf(this, self);
+  }
+
+  get formattedAuthors() {
+    return this.authors.reduceRight((acc, author) => `${acc}, ${author}`);
   }
 }
 
